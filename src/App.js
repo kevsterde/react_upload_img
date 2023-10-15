@@ -5,7 +5,7 @@ import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
 import Stack from "react-bootstrap/Stack"
 import "bootstrap/dist/css/bootstrap.min.css"
-import { storage } from './firebase'
+import { storage } from './firebase.js'
 import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage'
 import { v4 } from 'uuid'
 
