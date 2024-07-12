@@ -11,7 +11,7 @@ import { v4 } from 'uuid'
 
 function App() {
 
-  const [imageUpload, setImageUpload] = useState(null);
+  const [imageUploads, setImageUpload] = useState([]);
   const [imgList, setImgList] = useState([]);
   const imgListRef = ref(storage, "images/");
   const [loading, setLoading] = useState(false);
@@ -19,16 +19,23 @@ function App() {
 
 
   const uploadImg = () => {
-    if (imageUpload == null) return;
+    if (imageUploads.length === 0) return;
     setLoading(true);
-    const imgRef = ref(storage, `images/${imageUpload.name + v4()}`);
+  
+    const uploadPromises = imageUploads.map((imageUpload) =>{
+      const imgRef = ref(storage, `images/${imageUpload.name + v4()}`); 
+      return  uploadBytes(imgRef, imageUpload).then((snapshot) => {
+      return   getDownloadURL(snapshot.ref).then(url => {
+  
+          setImgList((prev) => [...prev, url]);
+      
+        });
+      })
+    })
 
-    uploadBytes(imgRef, imageUpload).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then(url => {
-
-        setImgList((prev) => [...prev, url]);
-        setLoading(false);
-      });
+    Promise.all(uploadPromises).then(()=>{
+      setImageUpload([])
+      setLoading(false);
     })
   }
 
@@ -51,7 +58,7 @@ function App() {
 
       <Form>
         <Form.Group>
-          <Form.Control type="file" accept="image/png, image/jpeg, image/webp" onChange={(e) => setImageUpload(e.target.files[0])} />
+          <Form.Control type="file" accept="image/png, image/jpeg, image/webp" multiple onChange={(e) => setImageUpload(Array.from(e.target.files))} />
         </Form.Group>
       </Form>
       <Button variant="outline-primary" onClick={() => uploadImg()} >Upload</Button>

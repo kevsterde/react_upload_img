@@ -1,16 +1,15 @@
 .App {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    max-width: 1200px;
-    margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
 }
 
 .img_con img {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    box-shadow: 0 0 5px black;
+  max-width: fit-content;
+  height: 200px;
+  object-fit: contain;
 }
